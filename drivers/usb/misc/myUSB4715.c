@@ -108,7 +108,7 @@ static int USB_I2C_Transfer(struct i2c_adapter *adap, bool isRead, uint8_t byAdd
 	}
 	else
 	{
-		dev_info(&adap->dev,
+		dev_dbg(&adap->dev,
 				 "Success! isRead %d byAddr 0x%02X wLength %d wdActualLength %d\n",
 				 isRead, byAddr, wLength, *wdActualLength);
 		return 0;
@@ -155,7 +155,7 @@ static s32 i2c_algo_i2c_xfer(struct i2c_adapter *adap,
 							 struct i2c_msg *msgs,
 							 int num)
 {
-	pr_info("my_usb_devdrv - In i2c_algo_i2c_xfer\n");
+	pr_debug("my_usb_devdrv - In i2c_algo_i2c_xfer\n");
 
 	int number_succes = 0;
 
@@ -214,7 +214,7 @@ static s32 i2c_algo_smbus_xfer(struct i2c_adapter *adap,
 							   int size,
 							   union i2c_smbus_data *data)
 {
-	pr_info("my_usb_devdrv - In i2c_algo_smbus_xfer. Size = %d\n", size);
+	pr_debug("my_usb_devdrv - In i2c_algo_smbus_xfer. Size = %d\n", size);
 
 	int ret;
 
@@ -432,7 +432,7 @@ static s32 i2c_algo_smbus_xfer(struct i2c_adapter *adap,
 		return -EOPNOTSUPP; // Not supported
 	}
 
-	dev_info(&adap->dev, "Successfully completed %s\n", __func__);
+	dev_dbg(&adap->dev, "Successfully completed %s\n", __func__);
 
 	return 0;
 }
@@ -465,7 +465,7 @@ static void RunTests(struct i2c_adapter *adap)
 		return;
 	}
 
-	pr_info("my_usb_devdrv - Running Test %u!\n\n\n\n", test);
+	pr_debug("my_usb_devdrv - Running Test %u!\n\n\n\n", test);
 	switch (test)
 	{
 	case 1:
@@ -489,7 +489,7 @@ static void RunTests(struct i2c_adapter *adap)
 		if (ret < 0)
 			dev_err(&adap->dev, "I2C transfer failed: %d\n", ret);
 		else
-			dev_info(&adap->dev, "I2C transfer success: Read 0x%02x%02x\n", rx_buf[0], rx_buf[1]);
+			dev_dbg(&adap->dev, "I2C transfer success: Read 0x%02x%02x\n", rx_buf[0], rx_buf[1]);
 	}
 
 
@@ -501,14 +501,14 @@ static void RunTests(struct i2c_adapter *adap)
 			if (ret < 0)
 				dev_err(&adap->dev, "I2C SMBus Byte Write failed: %d\n", ret);
 			else
-				dev_info(&adap->dev, "I2C SMBus Byte Write success\n");
+				dev_dbg(&adap->dev, "I2C SMBus Byte Write success\n");
 		}
 		{
 			int ret = i2c_smbus_read_byte(client);
 			if (ret < 0)
 				dev_err(&adap->dev, "I2C SMBus Byte Read failed: %d\n", ret);
 			else
-				dev_info(&adap->dev, "I2C SMBus Byte Read success: 0x%02x\n", ret);
+				dev_dbg(&adap->dev, "I2C SMBus Byte Read success: 0x%02x\n", ret);
 		}
 	}
 	break;
@@ -519,14 +519,14 @@ static void RunTests(struct i2c_adapter *adap)
 			if (ret < 0)
 				dev_err(&adap->dev, "I2C SMBus Byte data Write failed: %d\n", ret);
 			else
-				dev_info(&adap->dev, "I2C SMBus Byte data Write success\n");
+				dev_dbg(&adap->dev, "I2C SMBus Byte data Write success\n");
 		}
 		{
 			int ret = i2c_smbus_read_byte_data(client, 0x7E);
 			if (ret < 0)
 				dev_err(&adap->dev, "I2C SMBus Byte data Read failed: %d\n", ret);
 			else
-				dev_info(&adap->dev, "I2C SMBus Byte data Read success: 0x%02x\n", ret);
+				dev_dbg(&adap->dev, "I2C SMBus Byte data Read success: 0x%02x\n", ret);
 		}
 	}
 
@@ -538,14 +538,14 @@ static void RunTests(struct i2c_adapter *adap)
 			if (ret < 0)
 				dev_err(&adap->dev, "I2C SMBus word Write failed: %d\n", ret);
 			else
-				dev_info(&adap->dev, "I2C SMBus word Write success\n");
+				dev_dbg(&adap->dev, "I2C SMBus word Write success\n");
 		}
 		{
 			int ret = i2c_smbus_read_word_data(client, 0x7E);
 			if (ret < 0)
 				dev_err(&adap->dev, "I2C SMBus word data Read failed: %d\n", ret);
 			else
-				dev_info(&adap->dev, "I2C SMBus word data Read success: 0x%04x\n", ret);
+				dev_dbg(&adap->dev, "I2C SMBus word data Read success: 0x%04x\n", ret);
 		}
 	}
 	break;
@@ -558,13 +558,13 @@ static void RunTests(struct i2c_adapter *adap)
 		{
 			values[i] = i;
 		}
-		dev_info(&adap->dev, "Callingi2c_smbus_write_i2c_block_data\n");
+		dev_dbg(&adap->dev, "Callingi2c_smbus_write_i2c_block_data\n");
 
 		int ret = i2c_smbus_write_i2c_block_data(client, 0x7E, len, values);
 		if (ret < 0)
 			dev_err(&adap->dev, "I2C SMBus block Write failed: %d\n", ret);
 		else
-			dev_info(&adap->dev, "I2C SMBus block Write success\n");
+			dev_dbg(&adap->dev, "I2C SMBus block Write success\n");
 	}
 	break;
 	case 6:
@@ -583,7 +583,7 @@ static void RunTests(struct i2c_adapter *adap)
 			dev_err(&adap->dev, "I2C SMBus block Read length doesn't match %d != %d\n", ret, len);
 		else
 		{
-			dev_info(&adap->dev, "I2C SMBus block Read success\n");
+			dev_dbg(&adap->dev, "I2C SMBus block Read success\n");
 			for (size_t i = 0; i < len; i++)
 			{
 				printk("0x%02X ", values[i]);
@@ -600,7 +600,7 @@ static void RunTests(struct i2c_adapter *adap)
 	  if (ret < 0)
 		dev_err(&adap->dev, "I2C SMBus Quick failed: %d\n", ret);
 	  else
-		dev_info(&adap->dev, "I2C SMBus Quick success\n");
+		dev_dbg(&adap->dev, "I2C SMBus Quick success\n");
 	}
 	break
 	*/
@@ -620,13 +620,13 @@ static void RunTests(struct i2c_adapter *adap)
 	}
 	break;
 	}
-	pr_info("my_usb_devdrv - Tests Complete!\n\n\n\n");
+	pr_debug("my_usb_devdrv - Tests Complete!\n\n\n\n");
 	test++;
 
 	if (client)
 	{
 		i2c_unregister_device(client);
-		dev_info(&adap->dev, "Unregistered i2c client\n");
+		dev_dbg(&adap->dev, "Unregistered i2c client\n");
 	}
 }
 
@@ -687,7 +687,7 @@ static int my_usb_probe(struct usb_interface *intf, const struct usb_device_id *
 		// delete the adapter because we failed to add it
 		i2c_del_adapter(&dev->adapter);
 		of_node_put(dev->adapter.dev.of_node);
-		dev_err(&intf->dev, "Error Settin device into I2C Mode\n");
+		dev_err(&intf->dev, "Error Setting device into I2C Mode\n");
 		return -1;
 	}
 
@@ -708,7 +708,7 @@ static void my_usb_disconnect(struct usb_interface *intf)
 }
 
 static struct usb_driver my_usb_driver = {
-	.name = "my_usb_devdrv",
+	.name = "my_USB4715_drv",
 	.id_table = usb_dev_table,
 	.probe = my_usb_probe,
 	.disconnect = my_usb_disconnect,
@@ -720,7 +720,7 @@ static struct usb_driver my_usb_driver = {
 static int __init my_init(void)
 {
 	int result;
-	pr_info("my_usb_devdrv - Init Function\n");
+	pr_debug("my_usb_devdrv - Init Function\n");
 	result = usb_register(&my_usb_driver);
 	if (result)
 	{
@@ -736,7 +736,7 @@ static int __init my_init(void)
  */
 static void __exit my_exit(void)
 {
-	pr_info("my_usb_devdrv - Exit Function\n");
+	pr_debug("my_usb_devdrv - Exit Function\n");
 	usb_deregister(&my_usb_driver);
 }
 
