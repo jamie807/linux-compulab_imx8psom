@@ -3035,7 +3035,8 @@
 
 / {
 
- i2c@hid-cp2112 {
+ i2c@USB4715 {
+
   #address-cells = <1>;
   #size-cells = <0>;
 
@@ -3070,7 +3071,7 @@
 
    status = "okay";
   };
-# 53 "arch/arm64/boot/dts/compulab/som-imx8m-plus.dtsi"
+# 54 "arch/arm64/boot/dts/compulab/som-imx8m-plus.dtsi"
  };
 
 
@@ -3628,7 +3629,7 @@
   reg = <0x54>;
   pagesize = <16>;
  };
-# 665 "arch/arm64/boot/dts/compulab/som-imx8m-plus.dtsi"
+# 666 "arch/arm64/boot/dts/compulab/som-imx8m-plus.dtsi"
 };
 
 &i2c4 {
@@ -3716,7 +3717,7 @@
  assigned-clock-rates = <12288000>;
  status = "disabled";
 };
-# 768 "arch/arm64/boot/dts/compulab/som-imx8m-plus.dtsi"
+# 769 "arch/arm64/boot/dts/compulab/som-imx8m-plus.dtsi"
 &xcvr {
  #sound-dai-cells = <0>;
  status = "disabled";

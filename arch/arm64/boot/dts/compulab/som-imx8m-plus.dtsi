@@ -5,7 +5,8 @@
 
 / {
 	// Add a node for the USB bridge here, and rely on the bridge calling 
-	i2c@hid-cp2112 {
+	i2c@USB4715 {
+	// i2c@hid-cp2112 {
 		#address-cells = <1>;
 		#size-cells = <0>;
 

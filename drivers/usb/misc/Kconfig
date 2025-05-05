@@ -4,6 +4,13 @@
 #
 comment "USB Miscellaneous drivers"
 
+config MY_USB4715
+	tristate "USB-I2C Bridge for USB4715"
+	help
+	  Say Y here if you want to build a driver for the USB4715 USB Hub
+	  This driver creates functionality of turning the hub into a USB-I2C adapter. 
+	  To compile this driver as a module, choose M here:
+	  
 config USB_EMI62
 	tristate "EMI 6|2m USB Audio interface support"
 	help
