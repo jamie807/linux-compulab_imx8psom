@@ -2813,19 +2813,7 @@
    0x1A4 0x404 0x000 0x0 0x0 0xd6
   >;
  };
-
- pinctrl_sai3: sai3grp {
-  fsl,pins = <
-   0x1C4 0x424 0x4EC 0x0 0x1 0xd6
-   0x1C8 0x428 0x4E8 0x0 0x1 0xd6
-   0x1C0 0x420 0x4E4 0x0 0x1 0xd6
-   0x1CC 0x42C 0x000 0x0 0x0 0xd6
-   0x1D0 0x430 0x4E0 0x0 0x2 0xd6
-   0x1B8 0x418 0x000 0x5 0x0 0xd6
-   0x1BC 0x41C 0x000 0x5 0x0 0xd6
-  >;
- };
-
+# 228 "arch/arm64/boot/dts/compulab/som-imx8m-plus-pinctrl.dtsi"
  pinctrl_i2c2_synaptics_dsx_io: synaptics_dsx_iogrp {
   fsl,pins = <
    0x038 0x298 0x000 0x0 0x0 0x16
@@ -2836,8 +2824,6 @@
   fsl,pins = <
    0x220 0x480 0x5E8 0x0 0x4 0x140
    0x224 0x484 0x000 0x0 0x0 0x140
-   0x230 0x490 0x000 0x1 0x0 0x140
-   0x234 0x494 0x5E4 0x1 0x5 0x140
   >;
  };
 
@@ -2850,17 +2836,23 @@
 
  pinctrl_uart3: uart3grp {
   fsl,pins = <
-   0x1E0 0x440 0x5F8 0x1 0x4 0x140
-   0x1E4 0x444 0x000 0x1 0x0 0x140
+   0x230 0x490 0x5F8 0x0 0x6 0x140
+   0x234 0x494 0x000 0x0 0x0 0x140
    0x1EC 0x44C 0x5F4 0x1 0x3 0x140
    0x1E8 0x448 0x000 0x1 0x0 0x140
   >;
  };
 
- pinctrl_usb1_vbus: usb1grp {
+ pinctrl_uart4: uart4grp {
   fsl,pins = <
-   0x04C 0x2AC 0x000 0x0 0x0 0x19
+   0x238 0x498 0x600 0x0 0x8 0x140
+   0x23C 0x49C 0x000 0x0 0x0 0x140
   >;
+ };
+
+
+ pinctrl_usb1_vbus: usb1grp {
+  fsl,pins = <0x04C 0x2AC 0x000 0x0 0x0 0x19>;
  };
 
  pinctrl_usdhc1_gpio: usdhc1grp-gpio {
@@ -3042,6 +3034,46 @@
 
 
 / {
+
+ i2c@hid-cp2112 {
+  #address-cells = <1>;
+  #size-cells = <0>;
+
+  touchscreen@38 {
+   compatible = "edt,edt-ft5206";
+   reg = <0x38>;
+
+   interrupt-parent = <&gpio2>;
+   interrupts = <8 2>;
+
+   pinctrl-names = "default";
+   pinctrl-0 = <&touchscreen_pins>;
+
+   irq-gpios = <&gpio2 8 0>;
+   reset-gpios = <&gpio4 29 1>;
+
+
+
+   touchscreen-size-y = <480>;
+   touchscreen-size-x = <1920>;
+   touchscreen-swapped-x-y;
+   touchscreen-inverted-y;
+
+   status = "okay";
+  };
+
+  opt3001@44 {
+   compatible = "ti,opt3001";
+   reg = <0x44>;
+
+
+
+   status = "okay";
+  };
+# 53 "arch/arm64/boot/dts/compulab/som-imx8m-plus.dtsi"
+ };
+
+
  aliases {
   ethphy0 = &ethphy0;
   ethphy1 = &ethphy1;
@@ -3596,28 +3628,14 @@
   reg = <0x54>;
   pagesize = <16>;
  };
-
- goodix_ts@5d {
-  compatible = "goodix,gt911";
-  reg = <0x5d>;
-
-  interrupt-parent = <&gpio2>;
-  interrupts = <8 4>;
-
-  pinctrl-names = "default";
-  pinctrl-0 = <&touchscreen_pins>;
-
-  irq-gpios = <&gpio2 8 0>;
-  reset-gpios = <&pca9555 5 0>;
-  status = "okay";
- };
+# 665 "arch/arm64/boot/dts/compulab/som-imx8m-plus.dtsi"
 };
 
 &i2c4 {
  clock-frequency = <400000>;
  pinctrl-names = "default";
  pinctrl-0 = <&pinctrl_i2c4>;
- status = "disabled";
+ status = "okay";
 };
 
 &flexcan1 {
@@ -3698,22 +3716,7 @@
  assigned-clock-rates = <12288000>;
  status = "disabled";
 };
-
-&sai3 {
- #sound-dai-cells = <0>;
- pinctrl-names = "default";
- pinctrl-0 = <&pinctrl_sai3>;
- assigned-clocks = <&clk 125>;
- assigned-clock-parents = <&clk 38>;
- assigned-clock-rates = <12288000>;
- clocks = <&audio_blk_ctrl 8>, <&clk 0>,
-   <&audio_blk_ctrl 9>, <&clk 0>,
-   <&clk 0>;
- clock-names = "bus", "mclk0", "mclk1", "mclk2", "mclk3";
- fsl,sai-mclk-direction-output;
- status = "okay";
-};
-
+# 768 "arch/arm64/boot/dts/compulab/som-imx8m-plus.dtsi"
 &xcvr {
  #sound-dai-cells = <0>;
  status = "disabled";
@@ -3730,7 +3733,6 @@
  pinctrl-0 = <&pinctrl_uart1>;
  assigned-clocks = <&clk 142>;
  assigned-clock-parents = <&clk 49>;
- fsl,uart-has-rtscts;
  status = "okay";
 };
 
@@ -3749,6 +3751,14 @@
  assigned-clocks = <&clk 144>;
  assigned-clock-parents = <&clk 49>;
  fsl,uart-has-rtscts;
+ status = "okay";
+};
+
+&uart4 {
+ pinctrl-names = "default";
+ pinctrl-0 = <&pinctrl_uart4>;
+ assigned-clocks = <&clk 145>;
+ assigned-clock-parents = <&clk 49>;
  status = "okay";
 };
 
@@ -3942,46 +3952,8 @@
  compatible = "compulab,som-imx8m-plus", "fsl,imx8mp";
 };
 # 9 "arch/arm64/boot/dts/compulab/som-imx8m-plus.dts" 2
-# 1 "arch/arm64/boot/dts/compulab/som-imx8m-plus-mipi.dtsi" 1
-&mipi_dsi {
- #address-cells = <1>;
- #size-cells = <0>;
- status = "okay";
- backlight = <&dsi_backlight>;
- panel: panel@0 {
-  compatible = "startek,kd050hdfia020";
-  reg = <0>;
-  reset-gpio = <&pca9555 4 1>;
-  dsi-lanes = <4>;
-  status = "okay";
- };
-};
 
-&lcdif1 {
- status = "okay";
-};
-# 10 "arch/arm64/boot/dts/compulab/som-imx8m-plus.dts" 2
-# 1 "arch/arm64/boot/dts/compulab/som-imx8m-plus-lvds.dtsi" 1
-&lvds_backlight {
- status = "okay";
-};
 
-&lvds_panel {
- status = "okay";
-};
-
-&ldb {
- status = "okay";
-};
-
-&ldb_phy {
- status = "okay";
-};
-
-&lcdif2 {
- status = "okay";
-};
-# 11 "arch/arm64/boot/dts/compulab/som-imx8m-plus.dts" 2
 # 1 "arch/arm64/boot/dts/compulab/som-imx8m-plus-hdmi.dtsi" 1
 &irqsteer_hdmi {
  status = "okay";
@@ -4010,6 +3982,8 @@
  thres-high = <3 4>;
 };
 # 12 "arch/arm64/boot/dts/compulab/som-imx8m-plus.dts" 2
+
+
 
 / {
  model = "CompuLab SOM-iMX8M-Plus, multiple displays";

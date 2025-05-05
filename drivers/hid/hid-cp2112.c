@@ -26,6 +26,7 @@
 #include <linux/nls.h>
 #include <linux/usb/ch9.h>
 #include "hid-ids.h"
+#include <linux/of.h>
 
 #define CP2112_REPORT_MAX_LENGTH		64
 #define CP2112_GPIO_CONFIG_LENGTH		5
@@ -1308,6 +1309,8 @@ static int cp2112_probe(struct hid_device *hdev, const struct hid_device_id *id)
 	dev->adap.algo		= &smbus_algorithm;
 	dev->adap.algo_data	= dev;
 	dev->adap.dev.parent	= &hdev->dev;
+	dev->adap.dev.of_node = of_find_node_by_path("/i2c@hid-cp2112");
+
 	snprintf(dev->adap.name, sizeof(dev->adap.name),
 		 "CP2112 SMBus Bridge on hidraw%d",
 		 ((struct hidraw *)hdev->hidraw)->minor);

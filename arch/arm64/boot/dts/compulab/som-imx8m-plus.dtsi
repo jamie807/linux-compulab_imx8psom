@@ -4,6 +4,55 @@
  */
 
 / {
+	// Add a node for the USB bridge here, and rely on the bridge calling 
+	i2c@hid-cp2112 {
+		#address-cells = <1>;
+		#size-cells = <0>;
+
+		touchscreen@38 {
+			compatible = "edt,edt-ft5206";
+			reg = <0x38>;
+
+			interrupt-parent = <&gpio2>;
+			interrupts = <8 IRQ_TYPE_EDGE_FALLING>;
+
+			pinctrl-names = "default";
+			pinctrl-0 = <&touchscreen_pins>;
+
+			irq-gpios = <&gpio2 8 GPIO_ACTIVE_HIGH>;
+			reset-gpios = <&gpio4 29 GPIO_ACTIVE_LOW>;
+			// reset-gpios = <&pca9555 5 GPIO_ACTIVE_LOW>;
+			// reset-gpios = <&pca9555 5 GPIO_ACTIVE_HIGH>;
+
+			touchscreen-size-y = <480>;
+			touchscreen-size-x = <1920>;
+			touchscreen-swapped-x-y;
+			touchscreen-inverted-y;
+
+			status = "okay";
+		};
+
+		opt3001@44 {
+			compatible = "ti,opt3001";
+			reg = <0x44>;  // I2C address
+
+			// No interrupts — will use polling
+			
+			status = "okay";
+		};
+		/*
+		vl53l0x@29 {
+			compatible = "st,vl53l0x";
+			reg = <0x29>;  // I2C address
+			
+			// No interrupts — will use polling
+			
+			status = "okay";
+		};
+	 	*/
+	};
+
+
 	aliases {
 		ethphy0 = &ethphy0;
 		ethphy1 = &ethphy1;
@@ -574,45 +623,45 @@
 	// 	status = "okay";
 	// };
 
-	ft5x06_ts@38 {
-		compatible = "edt,edt-ft5206";
-		reg = <0x38>;
+	// ft5x06_ts@38 {
+	// 	compatible = "edt,edt-ft5206";
+	// 	reg = <0x38>;
 
-		interrupt-parent = <&gpio2>;
-		interrupts = <8 IRQ_TYPE_EDGE_FALLING>;
+	// 	interrupt-parent = <&gpio2>;
+	// 	interrupts = <8 IRQ_TYPE_EDGE_FALLING>;
 
-		pinctrl-names = "default";
-		pinctrl-0 = <&touchscreen_pins>;
+	// 	pinctrl-names = "default";
+	// 	pinctrl-0 = <&touchscreen_pins>;
 
-		irq-gpios = <&gpio2 8 GPIO_ACTIVE_HIGH>;
-		reset-gpios = <&gpio4 29 GPIO_ACTIVE_LOW>;
-		// reset-gpios = <&pca9555 5 GPIO_ACTIVE_LOW>;
-		// reset-gpios = <&pca9555 5 GPIO_ACTIVE_HIGH>;
+	// 	irq-gpios = <&gpio2 8 GPIO_ACTIVE_HIGH>;
+	// 	reset-gpios = <&gpio4 29 GPIO_ACTIVE_LOW>;
+	// 	// reset-gpios = <&pca9555 5 GPIO_ACTIVE_LOW>;
+	// 	// reset-gpios = <&pca9555 5 GPIO_ACTIVE_HIGH>;
 
-		touchscreen-size-y = <480>;
-		touchscreen-size-x = <1920>;
-		touchscreen-swapped-x-y;
-		touchscreen-inverted-y;
+	// 	touchscreen-size-y = <480>;
+	// 	touchscreen-size-x = <1920>;
+	// 	touchscreen-swapped-x-y;
+	// 	touchscreen-inverted-y;
 
-		status = "okay";
-	};
+	// 	status = "okay";
+	// };
 
-	opt3001@44 {
-		compatible = "ti,opt3001";
-		reg = <0x44>;  // I2C address
+	// opt3001@44 {
+	// 	compatible = "ti,opt3001";
+	// 	reg = <0x44>;  // I2C address
 
-		// No interrupts — will use polling
+	// 	// No interrupts — will use polling
 		
-		status = "okay";
-	};
-	vl53l0x@29 {
-		compatible = "st,vl53l0x";
-		reg = <0x29>;  // I2C address
+	// 	status = "okay";
+	// };
+	// vl53l0x@29 {
+	// 	compatible = "st,vl53l0x";
+	// 	reg = <0x29>;  // I2C address
 		
-		// No interrupts — will use polling
+	// 	// No interrupts — will use polling
 		
-		status = "okay";
-	};
+	// 	status = "okay";
+	// };
 };
 
 &i2c4 {
